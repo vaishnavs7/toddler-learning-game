@@ -51,18 +51,20 @@ const generateLevels = () => {
   const levels = [];
   let id = 0;
 
-  // Levels 1-10: Colors & Shapes
+  // Levels 1-10: Colors & Shapes (10 Unique Colors)
   const colors = [
-    { c: 'RED', bg: 'bg-red-500', hex: '🔴' }, { c: 'BLUE', bg: 'bg-blue-500', hex: '🟦' },
-    { c: 'GREEN', bg: 'bg-green-500', hex: '🟩' }, { c: 'YELLOW', bg: 'bg-yellow-400', hex: '🟡' },
-    { c: 'PURPLE', bg: 'bg-purple-500', hex: '🟪' }, { c: 'ORANGE', bg: 'bg-orange-500', hex: '🟧' }
+    { c: 'RED', bg: 'bg-red-500', hex: '🔴' }, { c: 'BLUE', bg: 'bg-blue-500', hex: '🔵' },
+    { c: 'GREEN', bg: 'bg-green-500', hex: '🟢' }, { c: 'YELLOW', bg: 'bg-yellow-400', hex: '🟡' },
+    { c: 'PURPLE', bg: 'bg-purple-500', hex: '🟣' }, { c: 'ORANGE', bg: 'bg-orange-500', hex: '🟠' },
+    { c: 'BROWN', bg: 'bg-amber-800', hex: '🟤' }, { c: 'BLACK', bg: 'bg-gray-900', hex: '⚫' },
+    { c: 'WHITE', bg: 'bg-gray-100', hex: '⚪' }, { c: 'PINK', bg: 'bg-pink-400', hex: '🌸' }
   ];
   for (let i = 0; i < 10; i++) {
-    const target = colors[i % colors.length];
-    const others = colors.filter(c => c.c !== target.c).slice(0, 2);
+    const target = colors[i];
+    const others = colors.filter(c => c.c !== target.c).sort(() => Math.random() - 0.5).slice(0, 2);
     const options = [target, ...others].sort(() => Math.random() - 0.5);
     levels.push({
-      id: id++, type: 'match', title: `Tap the ${target.c} shape!`, target: target.c, reward: '🎈',
+      id: id++, type: 'match', title: `Tap the ${target.c} color!`, target: target.c, reward: '🎈',
       options: options.map(o => ({ id: o.c, content: o.hex, color: o.bg }))
     });
   }
@@ -94,31 +96,62 @@ const generateLevels = () => {
     });
   }
 
-  // Levels 50-100: Scenarios (51 levels looping)
+  // Levels 50-100: Scenarios (51 Unique Scenarios - No Repeats)
   const scenarios = [
-    { 
-      t: 'Uh oh, trash! Where does it go?', icon: '🍎', tgt: 'bin', r: '🏅',
-      opt: [{id: 'floor', l: 'Floor', i: '👇', c: 'bg-gray-300 text-gray-700'}, {id: 'bin', l: 'Bin', i: '🗑️', c: 'bg-green-400 text-white'}]
-    },
-    { 
-      t: 'Before we eat, we must...', icon: '🥪', tgt: 'wash', r: '🧼',
-      opt: [{id: 'play', l: 'Play', i: '🪴', c: 'bg-amber-700 text-white'}, {id: 'wash', l: 'Wash', i: '🫧', c: 'bg-blue-400 text-white'}]
-    },
-    { 
-      t: 'Friend wants to play. We should...', icon: '🧸', tgt: 'share', r: '❤️',
-      opt: [{id: 'snatch', l: 'Keep it', i: '😠', c: 'bg-red-400 text-white'}, {id: 'share', l: 'Share', i: '🤝', c: 'bg-pink-400 text-white'}]
-    },
-    { 
-      t: 'Time for bed! What do we do?', icon: '🛏️', tgt: 'sleep', r: '🌙',
-      opt: [{id: 'run', l: 'Run around', i: '🏃', c: 'bg-yellow-400 text-gray-800'}, {id: 'sleep', l: 'Sleep', i: '😴', c: 'bg-indigo-400 text-white'}]
-    },
-    { 
-      t: 'We spilled juice! Let us...', icon: '🧃', tgt: 'clean', r: '🧽',
-      opt: [{id: 'leave', l: 'Leave it', i: '🤷', c: 'bg-gray-400 text-white'}, {id: 'clean', l: 'Wipe it', i: '🧻', c: 'bg-teal-400 text-white'}]
-    }
+    { t: 'Uh oh, trash! Where does it go?', icon: '🍎', tgt: 'bin', r: '🏅', opt: [{id: 'floor', l: 'Floor', i: '👇', c: 'bg-gray-300 text-gray-700'}, {id: 'bin', l: 'Bin', i: '🗑️', c: 'bg-green-400 text-white'}] },
+    { t: 'Before we eat, we must...', icon: '🥪', tgt: 'wash', r: '🧼', opt: [{id: 'play', l: 'Play', i: '🪴', c: 'bg-amber-700 text-white'}, {id: 'wash', l: 'Wash', i: '🫧', c: 'bg-blue-400 text-white'}] },
+    { t: 'Friend wants to play. We should...', icon: '🧸', tgt: 'share', r: '❤️', opt: [{id: 'snatch', l: 'Keep it', i: '😠', c: 'bg-red-400 text-white'}, {id: 'share', l: 'Share', i: '🤝', c: 'bg-pink-400 text-white'}] },
+    { t: 'Time for bed! What do we do?', icon: '🛏️', tgt: 'sleep', r: '🌙', opt: [{id: 'run', l: 'Run', i: '🏃', c: 'bg-yellow-400 text-gray-800'}, {id: 'sleep', l: 'Sleep', i: '😴', c: 'bg-indigo-400 text-white'}] },
+    { t: 'We spilled juice! Let us...', icon: '🧃', tgt: 'clean', r: '🧽', opt: [{id: 'leave', l: 'Leave it', i: '🤷', c: 'bg-gray-400 text-white'}, {id: 'clean', l: 'Wipe it', i: '🧻', c: 'bg-teal-400 text-white'}] },
+    { t: 'It is cold outside! Need a...', icon: '❄️', tgt: 'jacket', r: '🧥', opt: [{id: 'swim', l: 'Swimsuit', i: '🩱', c: 'bg-cyan-400 text-white'}, {id: 'jacket', l: 'Jacket', i: '🧥', c: 'bg-orange-500 text-white'}] },
+    { t: 'It is raining! Let us take an...', icon: '🌧️', tgt: 'umbrella', r: '☔', opt: [{id: 'sun', l: 'Sunnies', i: '🕶️', c: 'bg-yellow-400 text-gray-800'}, {id: 'umbrella', l: 'Umbrella', i: '☂️', c: 'bg-purple-500 text-white'}] },
+    { t: 'The plant is dry! We should...', icon: '🥀', tgt: 'water', r: '🌻', opt: [{id: 'kick', l: 'Kick it', i: '🥾', c: 'bg-red-400 text-white'}, {id: 'water', l: 'Water it', i: '🚿', c: 'bg-blue-400 text-white'}] },
+    { t: 'My nose is runny! I need a...', icon: '🤧', tgt: 'tissue', r: '🌟', opt: [{id: 'sleeve', l: 'Sleeve', i: '👕', c: 'bg-gray-400 text-white'}, {id: 'tissue', l: 'Tissue', i: '🧻', c: 'bg-teal-400 text-white'}] },
+    { t: 'See a cute dog! I should...', icon: '🐕', tgt: 'ask', r: '🐾', opt: [{id: 'pull', l: 'Pull tail', i: '✊', c: 'bg-red-500 text-white'}, {id: 'ask', l: 'Ask to pet', i: '👋', c: 'bg-green-400 text-white'}] },
+    { t: 'Dinner is ready! Let us...', icon: '🍲', tgt: 'sit', r: '😋', opt: [{id: 'jump', l: 'Jump', i: '🦘', c: 'bg-yellow-400 text-gray-800'}, {id: 'sit', l: 'Sit down', i: '🪑', c: 'bg-orange-400 text-white'}] },
+    { t: 'My toy broke! I should...', icon: '🚂', tgt: 'help', r: '🛠️', opt: [{id: 'cry', l: 'Cry', i: '😭', c: 'bg-blue-300 text-white'}, {id: 'help', l: 'Ask help', i: '🙋', c: 'bg-indigo-400 text-white'}] },
+    { t: 'Finished eating! Plate goes in...', icon: '🍽️', tgt: 'sink', r: '✨', opt: [{id: 'throw', l: 'Throw', i: '💨', c: 'bg-red-400 text-white'}, {id: 'sink', l: 'Sink', i: '🚰', c: 'bg-blue-400 text-white'}] },
+    { t: 'Crossing the street! We must...', icon: '🚦', tgt: 'hold', r: '🚶', opt: [{id: 'run', l: 'Run', i: '🏃', c: 'bg-orange-500 text-white'}, {id: 'hold', l: 'Hold hands', i: '🤝', c: 'bg-green-500 text-white'}] },
+    { t: 'In the library! We should...', icon: '📚', tgt: 'whisper', r: '🤫', opt: [{id: 'yell', l: 'Yell', i: '🗣️', c: 'bg-red-500 text-white'}, {id: 'whisper', l: 'Whisper', i: '🤫', c: 'bg-purple-400 text-white'}] },
+    { t: 'Dirty clothes go in the...', icon: '👕', tgt: 'hamper', r: '🧺', opt: [{id: 'floor', l: 'Floor', i: '👇', c: 'bg-gray-400 text-white'}, {id: 'hamper', l: 'Basket', i: '🧺', c: 'bg-orange-400 text-white'}] },
+    { t: 'About to sneeze! I must...', icon: '🤧', tgt: 'cover', r: '😷', opt: [{id: 'friend', l: 'On friend', i: '🤦', c: 'bg-red-400 text-white'}, {id: 'cover', l: 'Cover it', i: '💪', c: 'bg-teal-500 text-white'}] },
+    { t: 'I feel very mad! I will...', icon: '😡', tgt: 'breathe', r: '🧘', opt: [{id: 'hit', l: 'Hit', i: '🥊', c: 'bg-red-500 text-white'}, {id: 'breathe', l: 'Breathe', i: '🌬️', c: 'bg-blue-400 text-white'}] },
+    { t: 'See a tiny bug! Let us...', icon: '🐞', tgt: 'look', r: '🔍', opt: [{id: 'squish', l: 'Squish it', i: '🦶', c: 'bg-gray-500 text-white'}, {id: 'look', l: 'Just look', i: '👀', c: 'bg-green-400 text-white'}] },
+    { t: 'In the car! I need my...', icon: '🚗', tgt: 'belt', r: '🚙', opt: [{id: 'stand', l: 'Stand up', i: '🧍', c: 'bg-red-400 text-white'}, {id: 'belt', l: 'Seatbelt', i: '💺', c: 'bg-blue-500 text-white'}] },
+    { t: 'At the store! I will...', icon: '🛒', tgt: 'close', r: '🍎', opt: [{id: 'run', l: 'Run away', i: '🏃', c: 'bg-yellow-500 text-white'}, {id: 'close', l: 'Stay close', i: '👨‍👧', c: 'bg-green-500 text-white'}] },
+    { t: 'Morning time! Let us...', icon: '🌅', tgt: 'brush', r: '🦷', opt: [{id: 'candy', l: 'Eat candy', i: '🍬', c: 'bg-pink-400 text-white'}, {id: 'brush', l: 'Brush teeth', i: '🪥', c: 'bg-teal-400 text-white'}] },
+    { t: 'Kitty is hungry! We should...', icon: '🐱', tgt: 'feed', r: '🐟', opt: [{id: 'tease', l: 'Tease', i: '😜', c: 'bg-red-400 text-white'}, {id: 'feed', l: 'Feed her', i: '🥣', c: 'bg-orange-400 text-white'}] },
+    { t: 'Hands are sticky! Let us...', icon: '🍯', tgt: 'wash', r: '🧼', opt: [{id: 'shirt', l: 'Wipe shirt', i: '👕', c: 'bg-gray-400 text-white'}, {id: 'wash', l: 'Wash hands', i: '🚰', c: 'bg-blue-400 text-white'}] },
+    { t: 'I want a cookie! I will say...', icon: '🍪', tgt: 'please', r: '🥛', opt: [{id: 'grab', l: 'Grab it', i: '✊', c: 'bg-red-400 text-white'}, {id: 'please', l: 'Please', i: '🙏', c: 'bg-purple-400 text-white'}] },
+    { t: 'Hurt my knee! I need a...', icon: '🩹', tgt: 'bandage', r: '❤️‍🩹', opt: [{id: 'hide', l: 'Hide it', i: '🙈', c: 'bg-gray-500 text-white'}, {id: 'bandage', l: 'Bandage', i: '🩹', c: 'bg-pink-400 text-white'}] },
+    { t: 'Getting out of the bath...', icon: '🛁', tgt: 'towel', r: '🧖', opt: [{id: 'run', l: 'Run wet', i: '🏃', c: 'bg-blue-300 text-white'}, {id: 'towel', l: 'Get towel', i: '🧣', c: 'bg-teal-500 text-white'}] },
+    { t: 'My hands are cold! I need...', icon: '🖐️', tgt: 'mittens', r: '🧤', opt: [{id: 'socks', l: 'Socks', i: '🧦', c: 'bg-yellow-400 text-gray-800'}, {id: 'mittens', l: 'Mittens', i: '🧤', c: 'bg-orange-500 text-white'}] },
+    { t: 'My hair is messy! Let us...', icon: '💇', tgt: 'brush', r: '🎀', opt: [{id: 'mud', l: 'Add mud', i: '💩', c: 'bg-amber-800 text-white'}, {id: 'brush', l: 'Brush it', i: '梳', c: 'bg-pink-400 text-white'}] },
+    { t: 'Soup is too hot! I will...', icon: '🥣', tgt: 'blow', r: '🧊', opt: [{id: 'gulp', l: 'Gulp it', i: '🥵', c: 'bg-red-500 text-white'}, {id: 'blow', l: 'Blow on it', i: '🌬️', c: 'bg-blue-400 text-white'}] },
+    { t: 'At the movies! We must...', icon: '🍿', tgt: 'quiet', r: '🎬', opt: [{id: 'talk', l: 'Talk loud', i: '🗣️', c: 'bg-red-400 text-white'}, {id: 'quiet', l: 'Sit quiet', i: '🤫', c: 'bg-indigo-500 text-white'}] },
+    { t: 'In the sandbox! Let us...', icon: '🏖️', tgt: 'build', r: '🏰', opt: [{id: 'throw', l: 'Throw sand', i: '💨', c: 'bg-yellow-600 text-white'}, {id: 'build', l: 'Build', i: '🪣', c: 'bg-orange-400 text-white'}] },
+    { t: 'Going to the pool! Need a...', icon: '🏊', tgt: 'swim', r: '🏖️', opt: [{id: 'jeans', l: 'Jeans', i: '👖', c: 'bg-blue-600 text-white'}, {id: 'swim', l: 'Swimsuit', i: '🩱', c: 'bg-cyan-400 text-white'}] },
+    { t: 'Shoes are untied! I will...', icon: '👟', tgt: 'tie', r: '🎀', opt: [{id: 'trip', l: 'Leave them', i: '🤷', c: 'bg-gray-400 text-white'}, {id: 'tie', l: 'Tie them', i: '🪢', c: 'bg-green-500 text-white'}] },
+    { t: 'Hear a loud noise! I will...', icon: '🔊', tgt: 'cover', r: '😌', opt: [{id: 'scream', l: 'Scream', i: '😱', c: 'bg-red-500 text-white'}, {id: 'cover', l: 'Cover ears', i: '🙉', c: 'bg-blue-400 text-white'}] },
+    { t: 'See a sleeping baby! Be...', icon: '👶', tgt: 'gentle', r: '💤', opt: [{id: 'yell', l: 'Yell', i: '📢', c: 'bg-red-400 text-white'}, {id: 'gentle', l: 'Gentle', i: '🤫', c: 'bg-purple-300 text-white'}] },
+    { t: 'Sun is too bright! Wear...', icon: '☀️', tgt: 'glasses', r: '😎', opt: [{id: 'stare', l: 'Stare at it', i: '👀', c: 'bg-yellow-500 text-white'}, {id: 'glasses', l: 'Sunnies', i: '🕶️', c: 'bg-gray-800 text-white'}] },
+    { t: 'Time to draw! Use...', icon: '🖍️', tgt: 'paper', r: '🎨', opt: [{id: 'wall', l: 'The wall', i: '🧱', c: 'bg-red-400 text-white'}, {id: 'paper', l: 'Paper', i: '📝', c: 'bg-green-300 text-gray-800'}] },
+    { t: 'Bath time! We wash with...', icon: '🛁', tgt: 'soap', r: '🫧', opt: [{id: 'toast', l: 'Toast', i: '🍞', c: 'bg-amber-700 text-white'}, {id: 'soap', l: 'Soap', i: '🧼', c: 'bg-blue-400 text-white'}] },
+    { t: 'See a hot stove! We...', icon: '🔥', tgt: 'away', r: '🛑', opt: [{id: 'touch', l: 'Touch it', i: '👆', c: 'bg-red-500 text-white'}, {id: 'away', l: 'Stay away', i: '🙅', c: 'bg-blue-500 text-white'}] },
+    { t: 'Just woke up! Time to...', icon: '🥱', tgt: 'stretch', r: '🌞', opt: [{id: 'cry', l: 'Cry', i: '😭', c: 'bg-blue-300 text-white'}, {id: 'stretch', l: 'Stretch', i: '🤸', c: 'bg-orange-400 text-white'}] },
+    { t: 'Got a present! I say...', icon: '🎁', tgt: 'thanks', r: '💖', opt: [{id: 'throw', l: 'Throw it', i: '💨', c: 'bg-red-400 text-white'}, {id: 'thanks', l: 'Thank You', i: '🥰', c: 'bg-pink-400 text-white'}] },
+    { t: 'Need a book up high! I...', icon: '📚', tgt: 'ask', r: '📖', opt: [{id: 'climb', l: 'Climb', i: '🧗', c: 'bg-yellow-500 text-white'}, {id: 'ask', l: 'Ask adult', i: '🙋', c: 'bg-indigo-400 text-white'}] },
+    { t: 'See a muddy puddle! I...', icon: '💧', tgt: 'boots', r: '🐸', opt: [{id: 'sit', l: 'Sit in it', i: '🧘', c: 'bg-amber-700 text-white'}, {id: 'boots', l: 'Wear boots', i: '👢', c: 'bg-green-500 text-white'}] },
+    { t: 'Leaving the house! We...', icon: '🚪', tgt: 'lock', r: '🗝️', opt: [{id: 'open', l: 'Leave open', i: '💨', c: 'bg-gray-400 text-white'}, {id: 'lock', l: 'Lock door', i: '🔒', c: 'bg-yellow-600 text-white'}] },
+    { t: 'Tooth fell out! Put under...', icon: '🦷', tgt: 'pillow', r: '🧚', opt: [{id: 'trash', l: 'Trash', i: '🗑️', c: 'bg-gray-500 text-white'}, {id: 'pillow', l: 'Pillow', i: '🛏️', c: 'bg-purple-300 text-gray-800'}] },
+    { t: 'Finished playing! Let us...', icon: '🧩', tgt: 'clean', r: '🧹', opt: [{id: 'run', l: 'Run away', i: '🏃', c: 'bg-red-400 text-white'}, {id: 'clean', l: 'Clean up', i: '📦', c: 'bg-teal-500 text-white'}] },
+    { t: 'Feeling sad! I need a...', icon: '😢', tgt: 'hug', r: '🧸', opt: [{id: 'yell', l: 'Yell', i: '😠', c: 'bg-red-500 text-white'}, {id: 'hug', l: 'Hug', i: '🫂', c: 'bg-pink-400 text-white'}] },
+    { t: 'Dark outside! Turn on the...', icon: '🌙', tgt: 'light', r: '💡', opt: [{id: 'hide', l: 'Hide', i: '🙈', c: 'bg-gray-700 text-white'}, {id: 'light', l: 'Light', i: '🔦', c: 'bg-yellow-400 text-gray-800'}] },
+    { t: 'Eating dinner! Use a...', icon: '🍝', tgt: 'fork', r: '🍽️', opt: [{id: 'hands', l: 'Hands', i: '🖐️', c: 'bg-orange-400 text-white'}, {id: 'fork', l: 'Fork', i: '🍴', c: 'bg-blue-400 text-white'}] },
+    { t: 'At the doctor! Be...', icon: '🩺', tgt: 'brave', r: '🦸', opt: [{id: 'bite', l: 'Bite', i: '🦷', c: 'bg-red-500 text-white'}, {id: 'brave', l: 'Brave', i: '🦁', c: 'bg-green-500 text-white'}] }
   ];
   for (let i = 0; i < 51; i++) {
-    const s = scenarios[i % scenarios.length];
+    const s = scenarios[i];
     levels.push({
       id: id++, type: 'scenario', title: s.t, scenarioIcon: s.icon, target: s.tgt, reward: s.r,
       options: s.opt.sort(() => Math.random() - 0.5)
@@ -221,8 +254,7 @@ export default function App() {
 
   // Audio setup
   useEffect(() => {
-    // Changed to point directly to the public folder
-    audioRef.current = new Audio('/bgm.mp3'); 
+    audioRef.current = new Audio('/bgm.mp3');
     audioRef.current.loop = true;
     audioRef.current.volume = 0.3;
     return () => {
